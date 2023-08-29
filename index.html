@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>wasm experiment</title>
+    <style>
+        .container {
+            margin-top: 10%;
+        }
+
+        .row {
+            width: 100;
+        }
+
+        .row > * {
+            margin: 10px;
+            margin-left: 40%;
+            
+        }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <div class="row">
+            <p>Display a number in the <a href="https://r-knott.surrey.ac.uk/Fibonacci/fibrep.html#section4.1">fibonacci number system</a></p>
+        </div>
+        <div class="row">
+            <input class="element" id="input" type="text" placeholder="number to convert"></input>
+        </div>
+        <div class="row">
+            <button class="element" id="btn">Convert!</button>
+        </div>
+        <div class="row">
+            <div class="element" id="result"></div>
+        </div>
+    </div>
+
+
+    <script type="module">
+      import init, { fibonacci_translation } from "./pkg/wasm_fibonacci.js";
+      init().then(() => {
+        
+        const btn = document.getElementById('btn');
+
+        btn.addEventListener('click',(e) => {
+
+            const input = document.getElementById('input');
+            let number;
+            try {
+                number = BigInt(input.value);
+            } catch(e) {
+                console.log('Error converting to BigInt', e);
+                alert("Did you enter an integer?");
+                return;
+            }
+            if (number < 0) {
+                alert('Enter a positive integer!');
+                return;
+            }
+            const result = document.getElementById('result');
+            result.innerHTML = fibonacci_translation(number);
+        })
+        
+      })
+    </script>
+  </body>
+</html>
